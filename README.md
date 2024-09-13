@@ -16,11 +16,7 @@ Ensure your go package bin is in your $PATH, to `protoc` can call it:
 ### Development
 
 Compile user.proto file:
-<!-- `protoc --go_out=go/ --go_opt=paths=source_relative user.proto` -->
+`protoc --go_out=pkg user.proto`
 
-// LEFT OFF: this almost works, but puts the user.pb.go
-// in ./github.com/jbarrieault/protobuf-demo/pkg/user/
-// instead of ./pkg/user ...
-`protoc --go_out=pkg/user user.proto`
-
-That generates go implementation code in `./pkg/user.pb.go`.
+That generates go implementation code in `./pkg/user.pb.go`, which can be imported within the project like so:
+`import "github.com/jbarrieault/protobuf-demo/pkg/user"`

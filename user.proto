@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package user;
 
-option go_package = "github.com/jbarrieault/protobuf-demo";
+option go_package = "/user";
 
 message User {
   string first_name = 1;

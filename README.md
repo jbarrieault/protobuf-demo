@@ -11,6 +11,7 @@ Install the Go protobuf codegen plugin:
 `go install google.golang.org/protobuf/cmd/protoc-gen-go@latest`
 
 Ensure your go package bin is in your $PATH, to `protoc` can call it:
+
 `export PATH=$PATH:$(go env GOPATH)/bin`
 
 ### Development

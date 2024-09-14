@@ -12,6 +12,7 @@ func main() {
 	fmt.Println("hello, let's learn some protobuf")
 
 	u := &user.User{
+		Id:        71872,
 		FirstName: "Jack",
 		LastName:  "Barrieault",
 	}
@@ -22,4 +23,12 @@ func main() {
 	}
 	fmt.Printf("Serialized user: %x\n", data)
 
+	u2 := &user.User{}
+	err = proto.Unmarshal(data, u2)
+	if err != nil {
+		log.Fatalf("Failed to deserialize user: %v", err)
+	}
+
+	fmt.Printf("u:  %v\n", u)
+	fmt.Printf("u2: %v\n", u2)
 }

@@ -17,7 +17,6 @@ Ensure your go package bin is in your $PATH, to `protoc` can call it:
 ### Development
 
 Compile user.proto file:
-`protoc --go_out=pkg user.proto`
+`protoc --go_out=pkg --ruby_out=./ruby user.proto`
 
-That generates go implementation code in `./pkg/user.pb.go`, which can be imported within the project like so:
-`import "github.com/jbarrieault/protobuf-demo/pkg/user"`
+That generates go code in `./pkg/user.pb.go`, and ruby code in `./ruby/user_pb.rb`

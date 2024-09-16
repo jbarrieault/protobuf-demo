@@ -20,3 +20,8 @@ Compile user.proto file:
 `protoc --go_out=pkg --ruby_out=./ruby user.proto`
 
 That generates go code in `./pkg/user.pb.go`, and ruby code in `./ruby/user_pb.rb`
+
+### Passing protobuf data from Go to Ruby
+
+You can experiment schema evolution using the included `/cmd/user_client.go` and `ruby/user_server.rb`,
+which sends `user` messages over a socket.

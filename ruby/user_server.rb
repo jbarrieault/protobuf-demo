@@ -23,6 +23,5 @@ loop do
     user = User::User.decode(raw)
     puts "decoded user: #{user}"
 
-    client.send("thank you", 0)
     client.close
 end

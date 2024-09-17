@@ -23,12 +23,21 @@ puts "listening for (base64 encoded) protobuf user data on socket #{SOCKET_PATH}
 
 loop do
     client, _ = socket.accept
-    puts "client connected"
+    puts
+    puts "client connected!"
 
-    data = client.recv(1024)
-    raw = Base64.decode64(data)
-    user = User::User.decode(raw)
-    puts "decoded user: #{user}"
+    # May receive multiple messages per connection.
+    # And each one better be <= 1024 bytes 😅
+    while data = client.recv(1024)
+      break if data.empty?
+
+      raw = Base64.decode64(data)
+      user = User::User.decode(raw)
+      puts "decoded user: #{user}"
+
+      puts user.email.inspect
+    end
 
     client.close
 end
+

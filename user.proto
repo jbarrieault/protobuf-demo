@@ -7,6 +7,7 @@ option go_package = "/user";
 message User {
   string first_name = 1;
   string last_name = 2;
-  int32 id = 3;
-  string email = 4;
+  string middle_name 3;
+  int32 id = 4;
+  string email = 5;
 }

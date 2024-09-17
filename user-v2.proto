@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "/user";
+
+message Email {
+  string address = 1;
+}
+
+message User {
+  string first_name = 1;
+
+  // renaming a last_name field
+  string surname = 2;
+
+  // removing a field that was defined in the previous version
+  // string middle_name = 3;
+
+  int32 id = 4;
+
+  // email was a string in the previous version
+  Email email = 5;
+
+  // adding a field that was not in the previous version
+  int32 age = 6;
+}

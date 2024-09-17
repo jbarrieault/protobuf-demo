@@ -2,7 +2,7 @@ require 'socket'
 require 'base64'
 require 'google/protobuf'
 
-require_relative 'user_pb'
+require_relative 'user_v2_pb'
 
 SOCKET_PATH = "/tmp/protobuf-demo-socket.sock"
 
@@ -23,21 +23,12 @@ puts "listening for (base64 encoded) protobuf user data on socket #{SOCKET_PATH}
 
 loop do
     client, _ = socket.accept
-    puts
-    puts "client connected!"
+    puts "\nclient connected...decoding with user-v2.proto schema"
 
-    # May receive multiple messages per connection.
-    # And each one better be <= 1024 bytes 😅
-    while data = client.recv(1024)
-      break if data.empty?
-
-      raw = Base64.decode64(data)
-      user = User::User.decode(raw)
-      puts "decoded user: #{user}"
-
-      puts user.email.inspect
-    end
+    data = client.recv(1024)
+    raw = Base64.decode64(data)
+    user = User::User.decode(raw)
+    puts "decoded user: #{user}"
 
     client.close
 end
-

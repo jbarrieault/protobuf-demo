@@ -21,17 +21,24 @@ Compile user.proto file:
 
 That generates go code in `./pkg/user.pb.go`, and ruby code in `./ruby/user_pb.rb`
 
+Do the same for the v2 schema:
+`protoc --go_out=pkg --ruby_out=./ruby user_v2.proto`
+
 ### Passing protobuf data from Go to Ruby
 
-You can experiment schema evolution using the included `/cmd/user_client.go` and `ruby/user_server.rb`,
-which sends `user` messages over a socket.
+You can experiment schema evolution using the included `/cmd/[v1|v2]/write-user.go` and `ruby/read_user_[v1|v2].rb`,
+which sends/receives `user` messages over a socket.
 
-Schema evolution can be performed by using `user.proto` for one program, and `user-v2.proto` for the other.
+Schema evolution can be performed by using mismatching version between the go and ruby programs.
 
-To test forward compatibility (writing with new schema, reading with old):
-`protoc --go_out=pkg user-v2.proto`
-`protoc --ruby_out=./ruby user.proto`
+To test forward compatibility (reading with the v2 schema, writing with v1):
+`ruby read_user_v1.rb`
+`go run cmd/v1/write_user.go`
 
-Conversely, backward compatibility  (writing with old schema, reading with new):
-`protoc --go_out=pkg user.proto`
-`protoc --ruby_out=./ruby user-v2.proto`
+Conversely, backward compatibility  (reading with the v2 schema, writing with v1):
+`ruby read_user_v2.rb`
+`go run cmd/v1/write_user.go`
+
+You can observe how certain field changes such as renames are both backwards and forwards compatible! Additionally, added/removed fields are quietly ignored on the read side.
+
+Some changes, however, have unexpected results. Changing `email` from a `string` to a custom `Email` type appears to _almost_ backwards compatible—a v1 schema client parses without error but the `email` value contains leading characters `\n\u0016`. 🤔

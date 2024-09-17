@@ -9,19 +9,21 @@ message Email {
 }
 
 message User {
-  string first_name = 1;
+  int32 writer_version = 1;
+
+  string first_name = 2;
 
   // renaming a last_name field
-  string surname = 2;
+  string surname = 3;
 
   // removing a field that was defined in the previous version
-  // string middle_name = 3;
+  // string middle_name = 4;
 
-  int32 id = 4;
+  int32 id = 5;
 
   // email was a string in the previous version
-  Email email = 5;
+  Email email = 6;
 
   // adding a field that was not in the previous version
-  int32 age = 6;
+  int32 age = 7;
 }

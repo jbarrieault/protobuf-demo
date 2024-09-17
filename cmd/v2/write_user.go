@@ -6,8 +6,7 @@ import (
 	"log"
 	"net"
 
-	"github.com/jbarrieault/protobuf-demo/pkg/user"
-	user_v2 "github.com/jbarrieault/protobuf-demo/pkg/user-v2"
+	user "github.com/jbarrieault/protobuf-demo/pkg/user-v2"
 
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
@@ -23,23 +22,9 @@ func main() {
 	defer conn.Close()
 
 	u := &user.User{
-		Id:         71872,
-		FirstName:  "Jack",
-		LastName:   "Barrieault",
-		MiddleName: "Isaiah",
-		Email:      "jack@example.com",
-	}
-
-	_, err = conn.Write(base64ProtoMessageBytes(u))
-	if err != nil {
-		log.Fatalf("failed to write to socket: %v", err)
-	}
-
-	fmt.Println("User written to socket!")
-
-	u2 := &user_v2.User{
-		Id:        123494,
-		FirstName: "Jack",
+		WriterVersion: 2,
+		Id:            71872,
+		FirstName:     "Jack",
 
 		// clients using v1 schema correctly map this to last_name field :)
 		Surname: "Black",
@@ -47,13 +32,13 @@ func main() {
 		// clients using v1 schema _almost_ seamlessly handles the type change,
 		// it's coming out the other side with leading characters:
 		// "\n\u0016jack.black@example.com"
-		Email: &user_v2.Email{Address: "jack.black@example.com"},
+		Email: &user.Email{Address: "jack@example.com"},
 
 		// clients using v1 schema don't know about this field, it does not appear
 		Age: 55,
 	}
 
-	_, err = conn.Write(base64ProtoMessageBytes(u2))
+	_, err = conn.Write(base64ProtoMessageBytes(u))
 	if err != nil {
 		log.Fatalf("failed to write to socket: %v", err)
 	}

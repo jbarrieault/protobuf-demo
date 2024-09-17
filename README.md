@@ -5,9 +5,11 @@ Trying out protobuf, that's it.
 ## Setup
 
 Install the protoc and runtime libraries:
+
 `brew install protobuf`
 
 Install the Go protobuf codegen plugin:
+
 `go install google.golang.org/protobuf/cmd/protoc-gen-go@latest`
 
 Ensure your go package bin is in your $PATH, to `protoc` can call it:
@@ -15,11 +17,13 @@ Ensure your go package bin is in your $PATH, to `protoc` can call it:
 `export PATH=$PATH:$(go env GOPATH)/bin`
 
 Compile user.proto file:
+
 `protoc --go_out=pkg --ruby_out=./ruby user.proto`
 
 That generates go code in `./pkg/user.pb.go`, and ruby code in `./ruby/user_pb.rb`
 
 Do the same for the v2 schema:
+
 `protoc --go_out=pkg --ruby_out=./ruby user_v2.proto`
 
 ## Passing protobuf data from Go to Ruby
@@ -29,16 +33,18 @@ which sends/receives `user` messages over a socket.
 
 Schema evolution can be performed by using mismatching version between the go and ruby programs.
 
-To test forward compatibility (reading with the v2 schema, writing with v1):
+To test forward compatibility (reading with the v1 schema, writing with v2):
 
 `ruby read_user_v1.rb`
 `go run cmd/v1/write_user.go`
 
-Conversely, backward compatibility  (reading with the v2 schema, writing with v1):
+Conversely, backward compatibility (reading with the v2 schema, writing with v1):
 
 `ruby read_user_v2.rb`
 `go run cmd/v1/write_user.go`
 
 You can observe how certain field changes such as renames are both backwards and forwards compatible! Additionally, added/removed fields are quietly ignored on the read side.
 
-Some changes, however, have unexpected results. Changing `email` from a `string` to a custom `Email` type appears to _almost_ backwards compatible—a v1 schema client parses without error but the `email` value contains leading characters `\n\u0016`. 🤔
+Some changes, however, have unexpected results.
+
+Changing `email` from `string` to a custom `Email` type appears to _almost_ backwards compatible—decoding via the v1 schema can parse without error, but the resulting value contains leading characters `\n\u0016` (🤔). The change isn't forward comptaible whatsoever—decoding via the v2 schema raises a parse exception. The behavior seems exactly opposite from what I expected.

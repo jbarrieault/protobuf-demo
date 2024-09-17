@@ -21,7 +21,10 @@ message User {
 
   int32 id = 5;
 
-  // email was a string in the previous version
+  // This change is forward compatible, but NOT backwards compatible!
+  // a v1 schema reader cannot parse the new type.
+  // but, a v2 schema reader is able to parse the old type.
+  // email was a string in the previous version.
   Email email = 6;
 
   // adding a field that was not in the previous version

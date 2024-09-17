@@ -27,7 +27,9 @@ func main() {
 		FirstName:     "Jack",
 		LastName:      "Black",
 		MiddleName:    "Jacob",
-		Email:         "jack@example.com",
+		// The v2 schema changed emails type,
+		// which means adding this will break any reads that use the v2 schema
+		// Email:         "jack@example.com",
 	}
 
 	_, err = conn.Write(base64ProtoMessageBytes(u))

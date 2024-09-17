@@ -2,7 +2,7 @@
 
 Trying out protobuf, that's it.
 
-### Setup
+## Setup
 
 Install the protoc and runtime libraries:
 `brew install protobuf`
@@ -14,8 +14,6 @@ Ensure your go package bin is in your $PATH, to `protoc` can call it:
 
 `export PATH=$PATH:$(go env GOPATH)/bin`
 
-### Development
-
 Compile user.proto file:
 `protoc --go_out=pkg --ruby_out=./ruby user.proto`
 
@@ -24,7 +22,7 @@ That generates go code in `./pkg/user.pb.go`, and ruby code in `./ruby/user_pb.r
 Do the same for the v2 schema:
 `protoc --go_out=pkg --ruby_out=./ruby user_v2.proto`
 
-### Passing protobuf data from Go to Ruby
+## Passing protobuf data from Go to Ruby
 
 You can experiment schema evolution using the included `/cmd/[v1|v2]/write-user.go` and `ruby/read_user_[v1|v2].rb`,
 which sends/receives `user` messages over a socket.
@@ -32,10 +30,12 @@ which sends/receives `user` messages over a socket.
 Schema evolution can be performed by using mismatching version between the go and ruby programs.
 
 To test forward compatibility (reading with the v2 schema, writing with v1):
+
 `ruby read_user_v1.rb`
 `go run cmd/v1/write_user.go`
 
 Conversely, backward compatibility  (reading with the v2 schema, writing with v1):
+
 `ruby read_user_v2.rb`
 `go run cmd/v1/write_user.go`
 

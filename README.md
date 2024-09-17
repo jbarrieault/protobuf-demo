@@ -33,15 +33,15 @@ which sends/receives `user` messages over a socket.
 
 Schema evolution can be performed by using mismatching version between the go and ruby programs.
 
-To test forward compatibility (reading with the v1 schema, writing with v2):
-
-`ruby read_user_v1.rb`
-`go run cmd/v1/write_user.go`
-
-Conversely, backward compatibility (reading with the v2 schema, writing with v1):
+To test backward compatibility (decoding messages encoded using older schema):
 
 `ruby read_user_v2.rb`
 `go run cmd/v1/write_user.go`
+
+Conversely, for forward compatibility (decoding message encoded in newer schema):
+
+`ruby read_user_v1.rb`
+`go run cmd/v2/write_user.go`
 
 You can observe how certain field changes such as renames are both backwards and forwards compatible! Additionally, added/removed fields are quietly ignored on the read side.
 
